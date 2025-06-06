@@ -1,0 +1,40 @@
+<!-- Navigation bar -->
+<nav class="bg-[#051c2c] shadow-md px-4 md:px-6 py-3 overflow-x-auto hidden md:block">
+    <div class="max-w-7xl mx-auto flex flex-nowrap md:flex-wrap gap-4 md:gap-6 min-w-max md:min-w-0">
+        <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="font-medium">Sales & Estimates</span>
+        </a>
+        <div class="relative" id="projectDropdown" style="z-index: 9999;">
+            <button class="nav-link flex items-center space-x-2 text-sky-500 font-semibold bg-white/10 px-4 py-2 rounded-lg w-full" id="projectButton">
+                <i class="fas fa-cogs"></i>
+                <span>Project & Dispatch</span>
+                <i class="fas fa-chevron-down ml-2"></i>
+            </button>
+        </div>
+        <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+            <i class="fas fa-chart-line"></i>
+            <span class="font-medium">Financial</span>
+        </a>
+        <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+            <i class="fas fa-users"></i>
+            <span class="font-medium">Accounts</span>
+        </a>
+        <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+            <i class="fas fa-comments"></i>
+            <span class="font-medium">Marketing</span>
+        </a>
+    </div>
+</nav>
+
+<!-- Dropdown Menu Container -->
+<div id="dropdownMenu" class="hidden" style="position: absolute; z-index: 99999; background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+    <a href="pendingprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+        <i class="fas fa-clock mr-2"></i>
+        Pending Projects
+    </a>
+    <a href="activeprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+        <i class="fas fa-check-circle mr-2"></i>
+        Active Projects
+    </a>
+</div>

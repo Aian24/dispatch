@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>Pending Projects Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link href="https://unpkg.com/tippy.js@6/animations/scale.css" rel="stylesheet"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+
+        /* Mobile Select Styling */
+        @media (max-width: 768px) {
+            select {
+                font-size: 14px;
+                min-width: 0;
+                max-width: 100%;
+                width: 100%;
+                height: auto;
+                line-height: 1.2;
+            }
+            select option {
+                font-size: 12px;
+                padding: 6px 8px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100%;
+                box-sizing: border-box;
+                line-height: 1.2;
+                max-width: 100%;
+                display: block;
+            }
+            
+            /* Prevent dropdown from being too large */
+            select:focus {
+                max-height: 200px;
+                overflow-y: auto;
+            }
+        }
+
+        /* General select styling */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        select option {
+            padding: 8px 12px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Modern Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Glass Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Card Animations */
+        .dispatch-card {
+            animation: fadeIn 0.6s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .dispatch-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Notification Badge Animation */
+        .notification-badge {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Status Badge */
+        .status-badge {
+            background: linear-gradient(45deg, #4f46e5, #6366f1);
+            transition: all 0.3s ease;
+        }
+
+        .status-badge:hover {
+            transform: scale(1.05);
+        }
+
+        /* Toast Animation */
+        .toast {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Button Hover Animation */
+        .animated-button {
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #3b82f6, #38bdf8);
+        }
+
+        .animated-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Inline header content -->
+    <header class="sticky top-0 z-50 px-4 md:px-6 py-3 shadow-lg bg-[#33b6ff]">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img alt="Premium Designscape logo" class="h-10 md:h-12 w-auto rounded-lg shadow-md transition-transform hover:scale-105" 
+                     src="/dispatch/images/logo.PNG"/>
+            </div>
+            <div class="hidden md:flex items-center space-x-4 flex-1 max-w-xl mx-6">
+                <button class="px-3 py-1.5 md:px-4 md:py-2 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2">
+                    <span>Categories</span>
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+                <div class="relative flex-1">
+                    <input class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300"
+                           placeholder="Search..." type="search"/>
+                    <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-500 transition-colors">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3 md:space-x-6">
+                <button class="relative text-gray-600 hover:text-sky-500 transition-colors duration-300" id="notifications">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="notification-badge absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">16</span>
+                </button>
+                <button class="text-gray-600 hover:text-sky-500 transition-colors duration-300" id="bookmarks">
+                    <i class="fas fa-bookmark text-xl"></i>
+                </button>
+                <button class="text-gray-600 hover:text-sky-500 transition-colors duration-300" id="settings">
+                    <i class="fas fa-cog text-xl"></i>
+                </button>
+                <button class="flex items-center space-x-2 bg-gradient-to-r from-sky-500 to-blue-600 text-white px-3 md:px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                    <i class="fas fa-user-circle text-xl"></i>
+                    <span class="hidden md:inline font-medium">Profile</span>
+                </button>
+                <button class="text-gray-600 hover:text-sky-500 transition-colors duration-300 md:hidden" id="mobile-menu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile modal navigation -->
+        <div id="mobile-nav-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+            <div class="bg-[#051c2c] w-64 h-full p-6 overflow-y-auto">
+                <button id="close-mobile-nav" class="text-white mb-6">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+                <nav class="flex flex-col space-y-4">
+                    <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="font-medium">Sales & Estimates</span>
+                    </a>
+                    <a href="pendingprojects.html" class="nav-link flex items-center space-x-2 text-white hover:text-sky-500">
+                        <i class="fas fa-clock"></i>
+                        <span class="font-medium">Pending Projects</span>
+                    </a>
+                    <a href="activeprojects.html" class="nav-link flex items-center space-x-2 text-white hover:text-sky-500">
+                        <i class="fas fa-check-circle"></i>
+                        <span class="font-medium">Active Projects</span>
+                    </a>
+                    <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                        <i class="fas fa-chart-line"></i>
+                        <span class="font-medium">Financial</span>
+                    </a>
+                    <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                        <i class="fas fa-users"></i>
+                        <span class="font-medium">Accounts</span>
+                    </a>
+                    <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                        <i class="fas fa-comments"></i>
+                        <span class="font-medium">Marketing</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Inline navigation content -->
+    <nav class="bg-[#051c2c] shadow-md px-4 md:px-6 py-3 overflow-x-auto hidden md:block" style="position: relative; z-index: 9999;">
+        <div class="max-w-7xl mx-auto flex flex-nowrap md:flex-wrap gap-4 md:gap-6 min-w-max md:min-w-0">
+            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="font-medium">Sales & Estimates</span>
+            </a>
+            <div class="relative" id="projectDropdown" style="z-index: 9999;">
+                <button class="nav-link flex items-center space-x-2 text-sky-500 font-semibold bg-white/10 px-4 py-2 rounded-lg w-full" id="projectButton">
+                    <i class="fas fa-cogs"></i>
+                    <span>Project & Dispatch</span>
+                    <i class="fas fa-chevron-down ml-2"></i>
+                </button>
+            </div>
+            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                <i class="fas fa-chart-line"></i>
+                <span class="font-medium">Financial</span>
+            </a>
+            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                <i class="fas fa-users"></i>
+                <span class="font-medium">Accounts</span>
+            </a>
+            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                <i class="fas fa-comments"></i>
+                <span class="font-medium">Marketing</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Dropdown Menu Container -->
+    <div id="dropdownMenu" class="hidden" style="position: absolute; z-index: 99999; background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+        <a href="pendingprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+            <i class="fas fa-clock mr-2"></i>
+            Pending Projects
+        </a>
+        <a href="activeprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+            <i class="fas fa-check-circle mr-2"></i>
+            Active Projects
+        </a>
+    </div>
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-8" style="position: relative; z-index: 1;">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800">Pending Dispatches</h1>
+            <div class="flex items-center space-x-4">
+                <button class="animated-button text-white px-3 py-2 md:px-4 md:py-2 rounded-lg flex items-center space-x-2 text-sm md:text-base">
+                    <i class="fas fa-plus"></i>
+                    <span class="hidden sm:inline">New Dispatch</span>
+                    <span class="sm:hidden">New</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-col md:flex-row gap-4 mb-6 justify-between items-stretch md:items-center">
+            <div class="flex flex-col md:flex-row gap-4">
+                <select class="text-sm px-2 py-1.5 md:px-4 md:py-2 rounded-lg border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300 w-full md:w-auto">
+                    <option>All Categories</option>
+                    <option>Office Cleaning</option>
+                    <option>Plumbing</option>
+                    <option>Home Repair</option>
+                </select>
+                <select class="text-sm px-2 py-1.5 md:px-4 md:py-2 rounded-lg border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300 w-full md:w-auto">
+                    <option>All Teams</option>
+                    <option>Team A</option>
+                    <option>Team B</option>
+                </select>
+                <select class="text-sm px-2 py-1.5 md:px-4 md:py-2 rounded-lg border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300 w-full md:w-auto">
+                    <option>Priority</option>
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                </select>
+            </div>
+            <!-- Search Bar -->
+            <div class="relative w-full md:w-72">
+                <input type="search" 
+                       placeholder="Search in table..." 
+                       class="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300"
+                />
+                <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-sky-500 transition-colors">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modern Data Table -->
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+            <div class="overflow-x-auto -mx-4 md:mx-0">
+                <table class="w-full min-w-[800px]">
+                    <thead class="bg-gradient-to-r from-sky-600 to-blue-700 text-white">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>Priority Type</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>Service Category</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>Client Name</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>Address</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>Start Date</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>B. Hours</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>Distance</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>ETA</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>Team Assigned</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold cursor-pointer hover:bg-sky-600 transition-colors duration-200 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <span>Status</span>
+                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
+                            <td class="px-6 py-4">
+                                <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-leaf text-green-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">Lawn Mowing</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">8 hrs.</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-route text-green-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
+                            <td class="px-6 py-4">
+                                <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-leaf text-green-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">Lawn Mowing</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Lost Street Dimatagpuan Dimahanap,, 1234">Lost Street Dimatagpuan Dimahanap,, 1234</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">8 hrs.</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">Offline</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">Offline</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
+                            <td class="px-6 py-4">
+                                <span class="status-badge text-white text-xs font-semibold px-3 py-1 rounded-full">VIP</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-broom text-blue-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">Office Cleaning Service</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-medium text-gray-900">Ryan Lester</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines San Jose Monte Bulacan, 3023">Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines San Jose Monte Bulacan, 3023</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">60 hrs.</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-route text-green-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-users text-purple-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">Team B</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
+                            <td class="px-6 py-4">
+                                <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-broom text-blue-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">Office Cleaning Service</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="N/A 123 123, 123">N/A 123 123, 123</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">60 hrs.</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">Offline</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">Offline</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
+                            <td class="px-6 py-4">
+                                <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-broom text-blue-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">Office Cleaning Package</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">360 hrs.</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-route text-green-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-users text-purple-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">Team A</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
+                            <td class="px-6 py-4">
+                                <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-home text-orange-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">Roofing Installation</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Lost Street Dimatagpuan Dimahanap,, 1234">Lost Street Dimatagpuan Dimahanap,, 1234</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">200 hrs.</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">Offline</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">Offline</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
+                            <td class="px-6 py-4">
+                                <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-wrench text-orange-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">Plumbing Repair</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">15 hrs.</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-route text-green-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
+                            <td class="px-6 py-4">
+                                <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-paint-roller text-blue-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">Residential House Painting</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">120 hrs.</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-route text-green-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
+                            <td class="px-6 py-4">
+                                <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-broom text-blue-500"></i>
+                                    <span class="text-sm font-medium text-gray-900">Deep Clean with Free Hose Package</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-medium text-gray-900">Bria Salsalani</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
+                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pinyahan, Diliman Philippines Quezon, Metro Manila, 1008">Pinyahan, Diliman Philippines Quezon, Metro Manila, 1008</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">0 hrs.</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-route text-green-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">9.3 km</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-gray-900">31 mins</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm text-gray-500">N/A</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="bg-gray-50 px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between items-center border-t border-gray-100 gap-4">
+                <div class="text-sm text-gray-600 order-2 md:order-1">
+                    Showing <span class="font-medium">1</span> to <span class="font-medium">1</span> of <span class="font-medium">1</span> entries
+                </div>
+                <div class="flex space-x-2 order-1 md:order-2">
+                    <button class="px-3 py-2 md:px-4 md:py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                        <i class="fas fa-chevron-left mr-1"></i>
+                        <span class="hidden sm:inline">Previous</span>
+                    </button>
+                    <button class="px-3 py-2 md:px-4 md:py-2 text-sm font-medium text-white bg-sky-500 border border-sky-500 rounded-lg hover:bg-sky-600 transition-colors duration-200">
+                        1
+                    </button>
+                    <button class="px-3 py-2 md:px-4 md:py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                        <span class="hidden sm:inline">Next</span>
+                        <i class="fas fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mobile nav toggle script from header.html
+        const mobileMenuBtn = document.getElementById('mobile-menu');
+        const mobileNavModal = document.getElementById('mobile-nav-modal');
+        const closeMobileNavBtn = document.getElementById('close-mobile-nav');
+
+        if(mobileMenuBtn && mobileNavModal && closeMobileNavBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileNavModal.classList.remove('hidden');
+                mobileNavModal.style.display = 'block';
+            });
+
+            closeMobileNavBtn.addEventListener('click', () => {
+                mobileNavModal.classList.add('hidden');
+                mobileNavModal.style.display = 'none';
+            });
+        }
+
+        // Project Dropdown functionality
+        const projectButton = document.getElementById('projectButton');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        if (projectButton && dropdownMenu) {
+            projectButton.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('hidden');
+                
+                // Position the dropdown under the button
+                const buttonRect = projectButton.getBoundingClientRect();
+                dropdownMenu.style.top = `${buttonRect.bottom + window.scrollY}px`;
+                dropdownMenu.style.left = `${buttonRect.left}px`;
+                dropdownMenu.style.width = `${buttonRect.width}px`;
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!projectButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        }
+
+        // Load header and navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHTML('nav/header.html', 'header-container').then(() => {
+                // Initialize mobile menu functionality after header is loaded
+                initializeMobileMenu();
+            });
+            loadHTML('nav/navigation.html', 'nav-container').then(() => {
+                // Ensure navigation is hidden on mobile after loading
+                const nav = document.querySelector('#nav-container nav');
+                if (nav) {
+                    nav.classList.add('hidden', 'md:block');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
