@@ -848,6 +848,28 @@
             initializeMapModal();
             initializeActionDropdown();
 
+            // Filter dropdown functionality
+            const filterButton = document.getElementById('filterButton');
+            const filterDropdown = document.getElementById('filterDropdown');
+            let isDropdownOpen = false;
+
+            if (filterButton && filterDropdown) {
+                filterButton.addEventListener('click', () => {
+                    isDropdownOpen = !isDropdownOpen;
+                    filterDropdown.classList.toggle('hidden');
+                    filterButton.classList.toggle('bg-gray-50');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!filterButton.contains(e.target) && !filterDropdown.contains(e.target)) {
+                        isDropdownOpen = false;
+                        filterDropdown.classList.add('hidden');
+                        filterButton.classList.remove('bg-gray-50');
+                    }
+                });
+            }
+
             // Add event listeners for view buttons
             document.querySelectorAll('button.animated-button').forEach(button => {
                 button.addEventListener('click', function() {
