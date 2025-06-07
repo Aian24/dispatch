@@ -916,6 +916,75 @@
                     document.getElementById('dispatchModal').classList.add('hidden');
                 }
             });
+
+            // Initialize drag and drop for table columns
+            const table = document.querySelector('table');
+            const headers = table.querySelectorAll('th.draggable-header');
+            let draggedHeader = null;
+
+            headers.forEach(header => {
+                header.addEventListener('dragstart', (e) => {
+                    draggedHeader = header;
+                    header.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', header.dataset.column);
+                });
+
+                header.addEventListener('dragend', () => {
+                    header.classList.remove('dragging');
+                    headers.forEach(h => h.classList.remove('column-drop-target'));
+                });
+
+                header.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    headers.forEach(h => h.classList.remove('column-drop-target'));
+                    if (header !== draggedHeader) {
+                        header.classList.add('column-drop-target');
+                    }
+                });
+
+                header.addEventListener('dragleave', () => {
+                    header.classList.remove('column-drop-target');
+                });
+
+                header.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const sourceColumn = e.dataTransfer.getData('text/plain');
+                    const targetColumn = header.dataset.column;
+                    
+                    if (sourceColumn && targetColumn && sourceColumn !== targetColumn) {
+                        const sourceIndex = Array.from(headers).findIndex(h => h.dataset.column === sourceColumn);
+                        const targetIndex = Array.from(headers).findIndex(h => h.dataset.column === targetColumn);
+                        
+                        // Reorder headers
+                        const headerRow = table.querySelector('thead tr');
+                        const sourceHeader = headerRow.children[sourceIndex];
+                        const targetHeader = headerRow.children[targetIndex];
+                        
+                        if (sourceIndex < targetIndex) {
+                            targetHeader.parentNode.insertBefore(sourceHeader, targetHeader.nextSibling);
+                        } else {
+                            targetHeader.parentNode.insertBefore(sourceHeader, targetHeader);
+                        }
+                        
+                        // Reorder data cells in each row
+                        const rows = table.querySelectorAll('tbody tr');
+                        rows.forEach(row => {
+                            const sourceCell = row.children[sourceIndex];
+                            const targetCell = row.children[targetIndex];
+                            
+                            if (sourceIndex < targetIndex) {
+                                targetCell.parentNode.insertBefore(sourceCell, targetCell.nextSibling);
+                            } else {
+                                targetCell.parentNode.insertBefore(sourceCell, targetCell);
+                            }
+                        });
+                    }
+                    
+                    headers.forEach(h => h.classList.remove('column-drop-target'));
+                });
+            });
         });
 
         // Initialize tooltips
