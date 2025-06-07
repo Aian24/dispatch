@@ -1,40 +1,127 @@
 <!-- Navigation bar -->
-<nav class="bg-[#051c2c] shadow-md px-4 md:px-6 py-3 overflow-x-auto hidden md:block">
-    <div class="max-w-7xl mx-auto flex flex-nowrap md:flex-wrap gap-4 md:gap-6 min-w-max md:min-w-0">
-        <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="font-medium">Sales & Estimates</span>
-        </a>
-        <div class="relative" id="projectDropdown" style="z-index: 9999;">
-            <button class="nav-link flex items-center space-x-2 text-sky-500 font-semibold bg-white/10 px-4 py-2 rounded-lg w-full" id="projectButton">
-                <i class="fas fa-cogs"></i>
-                <span>Project & Dispatch</span>
-                <i class="fas fa-chevron-down ml-2"></i>
+<nav class="bg-[#051c2c] shadow-md px-4 md:px-6 py-3">
+    <div class="max-w-7xl mx-auto">
+        <!-- Burger Menu Button (Mobile Only) -->
+        <div class="flex justify-between items-center md:hidden">
+            <button id="burgerMenuBtn" class="text-white p-2">
+                <i class="fas fa-bars text-xl"></i>
             </button>
         </div>
-        <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-            <i class="fas fa-chart-line"></i>
-            <span class="font-medium">Financial</span>
-        </a>
-        <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-            <i class="fas fa-users"></i>
-            <span class="font-medium">Accounts</span>
-        </a>
-        <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-            <i class="fas fa-comments"></i>
-            <span class="font-medium">Marketing</span>
-        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center justify-start space-x-6">
+            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="font-medium">Sales & Estimates</span>
+            </a>
+            <div class="relative" id="projectDropdown" style="z-index: 9999;">
+                <button class="nav-link flex items-center space-x-2 text-sky-500 font-semibold bg-white/10 px-4 py-2 rounded-lg" id="projectButton">
+                    <i class="fas fa-cogs"></i>
+                    <span>Project & Dispatch</span>
+                    <i class="fas fa-chevron-down ml-2"></i>
+                </button>
+            </div>
+            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                <i class="fas fa-chart-line"></i>
+                <span class="font-medium">Financial</span>
+            </a>
+            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                <i class="fas fa-users"></i>
+                <span class="font-medium">Accounts</span>
+            </a>
+            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                <i class="fas fa-comments"></i>
+                <span class="font-medium">Marketing</span>
+            </a>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-[#051c2c] w-full mt-2">
+            <div class="flex flex-col space-y-1">
+                <a class="block px-4 py-2 text-white hover:text-sky-500" href="#">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Sales & Estimates
+                </a>
+                <div class="px-4 py-2">
+                    <div class="text-sky-500 font-semibold mb-2">
+                        <i class="fas fa-cogs mr-2"></i>
+                        Project & Dispatch
+                    </div>
+                    <div class="pl-4 space-y-1">
+                        <a href="dispatchboard.html" class="block py-2 text-white hover:text-sky-500">
+                            <i class="fas fa-tachometer-alt mr-2"></i>
+                            Dispatch Board
+                        </a>
+                        <a href="pendingprojects.html" class="block py-2 text-white hover:text-sky-500">
+                            <i class="fas fa-clock mr-2"></i>
+                            Pending Projects
+                        </a>
+                        <a href="activeprojects.html" class="block py-2 text-white hover:text-sky-500">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            Active Projects
+                        </a>
+                    </div>
+                </div>
+                <a class="block px-4 py-2 text-white hover:text-sky-500" href="#">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    Financial
+                </a>
+                <a class="block px-4 py-2 text-white hover:text-sky-500" href="#">
+                    <i class="fas fa-users mr-2"></i>
+                    Accounts
+                </a>
+                <a class="block px-4 py-2 text-white hover:text-sky-500" href="#">
+                    <i class="fas fa-comments mr-2"></i>
+                    Marketing
+                </a>
+            </div>
+        </div>
     </div>
 </nav>
 
 <!-- Dropdown Menu Container -->
-<div id="dropdownMenu" class="hidden" style="position: absolute; z-index: 99999; background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
-    <a href="pendingprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
-        <i class="fas fa-clock mr-2"></i>
-        Pending Projects
-    </a>
-    <a href="activeprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
-        <i class="fas fa-check-circle mr-2"></i>
-        Active Projects
-    </a>
+<div id="dropdownMenu" class="hidden" style="position: absolute; z-index: 99999; background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); min-width: 200px;">
+    <div class="py-1">
+        <a href="dispatchboard.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+            <i class="fas fa-tachometer-alt mr-2"></i>
+            Dispatch Board
+        </a>
+        <a href="pendingprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+            <i class="fas fa-clock mr-2"></i>
+            Pending Projects
+        </a>
+        <a href="activeprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+            <i class="fas fa-check-circle mr-2"></i>
+            Active Projects
+        </a>
+    </div>
 </div>
+
+<script>
+    // Toggle mobile menu
+    document.getElementById('burgerMenuBtn').addEventListener('click', function() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Toggle dropdown menu
+    const projectButton = document.getElementById('projectButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    projectButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+        
+        // Position the dropdown menu
+        const buttonRect = projectButton.getBoundingClientRect();
+        dropdownMenu.style.top = `${buttonRect.bottom + window.scrollY}px`;
+        dropdownMenu.style.left = `${buttonRect.left}px`;
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!projectButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+</script>

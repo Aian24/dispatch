@@ -220,86 +220,103 @@
                     <i class="fas fa-user-circle text-xl"></i>
                     <span class="hidden md:inline font-medium">Profile</span>
                 </button>
-                <button class="text-gray-600 hover:text-sky-500 transition-colors duration-300 md:hidden" id="mobile-menu">
+                <button class="text-gray-600 hover:text-sky-500 transition-colors duration-300 md:hidden" id="burgerMenuBtn">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
             </div>
         </div>
-        <!-- Mobile modal navigation -->
-        <div id="mobile-nav-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-            <div class="bg-[#051c2c] w-64 h-full p-6 overflow-y-auto">
-                <button id="close-mobile-nav" class="text-white mb-6">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-                <nav class="flex flex-col space-y-4">
-                    <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="font-medium">Sales & Estimates</span>
-                    </a>
-                    <a href="pendingprojects.html" class="nav-link flex items-center space-x-2 text-white hover:text-sky-500">
-                        <i class="fas fa-clock"></i>
-                        <span class="font-medium">Pending Projects</span>
-                    </a>
-                    <a href="activeprojects.html" class="nav-link flex items-center space-x-2 text-white hover:text-sky-500">
-                        <i class="fas fa-check-circle"></i>
-                        <span class="font-medium">Active Projects</span>
-                    </a>
-                    <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-                        <i class="fas fa-chart-line"></i>
-                        <span class="font-medium">Financial</span>
-                    </a>
-                    <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-                        <i class="fas fa-users"></i>
-                        <span class="font-medium">Accounts</span>
-                    </a>
-                    <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-                        <i class="fas fa-comments"></i>
-                        <span class="font-medium">Marketing</span>
-                    </a>
-                </nav>
-            </div>
-        </div>
     </header>
 
-    <!-- Inline navigation content -->
-    <nav class="bg-[#051c2c] shadow-md px-4 md:px-6 py-3 overflow-x-auto hidden md:block" style="position: relative; z-index: 9999;">
-        <div class="max-w-7xl mx-auto flex flex-nowrap md:flex-wrap gap-4 md:gap-6 min-w-max md:min-w-0">
-            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="font-medium">Sales & Estimates</span>
-            </a>
-            <div class="relative" id="projectDropdown" style="z-index: 9999;">
-                <button class="nav-link flex items-center space-x-2 text-sky-500 font-semibold bg-white/10 px-4 py-2 rounded-lg w-full" id="projectButton">
-                    <i class="fas fa-cogs"></i>
-                    <span>Project & Dispatch</span>
-                    <i class="fas fa-chevron-down ml-2"></i>
-                </button>
+    <!-- Navigation bar -->
+    <nav class="bg-[#051c2c] shadow-md px-4 md:px-6 py-3">
+        <div class="max-w-7xl mx-auto">
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center justify-start space-x-6">
+                <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="font-medium">Sales & Estimates</span>
+                </a>
+                <div class="relative" id="projectDropdown" style="z-index: 9999;">
+                    <button class="nav-link flex items-center space-x-2 text-sky-500 font-semibold bg-white/10 px-4 py-2 rounded-lg" id="projectButton">
+                        <i class="fas fa-cogs"></i>
+                        <span>Project & Dispatch</span>
+                        <i class="fas fa-chevron-down ml-2"></i>
+                    </button>
+                </div>
+                <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="font-medium">Financial</span>
+                </a>
+                <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                    <i class="fas fa-users"></i>
+                    <span class="font-medium">Accounts</span>
+                </a>
+                <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
+                    <i class="fas fa-comments"></i>
+                    <span class="font-medium">Marketing</span>
+                </a>
             </div>
-            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-                <i class="fas fa-chart-line"></i>
-                <span class="font-medium">Financial</span>
-            </a>
-            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-                <i class="fas fa-users"></i>
-                <span class="font-medium">Accounts</span>
-            </a>
-            <a class="nav-link flex items-center space-x-2 text-white hover:text-sky-500" href="#">
-                <i class="fas fa-comments"></i>
-                <span class="font-medium">Marketing</span>
-            </a>
+
+            <!-- Mobile Navigation Menu -->
+            <div id="mobileMenu" class="hidden md:hidden bg-[#051c2c] w-full mt-2">
+                <div class="flex flex-col space-y-1">
+                    <a class="block px-4 py-2 text-white hover:text-sky-500" href="#">
+                        <i class="fas fa-shopping-cart mr-2"></i>
+                        Sales & Estimates
+                    </a>
+                    <div class="px-4 py-2">
+                        <div class="text-sky-500 font-semibold mb-2">
+                            <i class="fas fa-cogs mr-2"></i>
+                            Project & Dispatch
+                        </div>
+                        <div class="pl-4 space-y-1">
+                            <a href="dispatchboard.html" class="block py-2 text-white hover:text-sky-500">
+                                <i class="fas fa-tachometer-alt mr-2"></i>
+                                Dispatch Board
+                            </a>
+                            <a href="pendingprojects.html" class="block py-2 text-white hover:text-sky-500">
+                                <i class="fas fa-clock mr-2"></i>
+                                Pending Projects
+                            </a>
+                            <a href="activeprojects.html" class="block py-2 text-white hover:text-sky-500">
+                                <i class="fas fa-check-circle mr-2"></i>
+                                Active Projects
+                            </a>
+                        </div>
+                    </div>
+                    <a class="block px-4 py-2 text-white hover:text-sky-500" href="#">
+                        <i class="fas fa-chart-line mr-2"></i>
+                        Financial
+                    </a>
+                    <a class="block px-4 py-2 text-white hover:text-sky-500" href="#">
+                        <i class="fas fa-users mr-2"></i>
+                        Accounts
+                    </a>
+                    <a class="block px-4 py-2 text-white hover:text-sky-500" href="#">
+                        <i class="fas fa-comments mr-2"></i>
+                        Marketing
+                    </a>
+                </div>
+            </div>
         </div>
     </nav>
 
     <!-- Dropdown Menu Container -->
-    <div id="dropdownMenu" class="hidden" style="position: absolute; z-index: 99999; background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
-        <a href="pendingprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
-            <i class="fas fa-clock mr-2"></i>
-            Pending Projects
-        </a>
-        <a href="activeprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
-            <i class="fas fa-check-circle mr-2"></i>
-            Active Projects
-        </a>
+    <div id="dropdownMenu" class="hidden" style="position: absolute; z-index: 99999; background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); min-width: 200px;">
+        <div class="py-1">
+            <a href="dispatchboard.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+                <i class="fas fa-tachometer-alt mr-2"></i>
+                Dispatch Board
+            </a>
+            <a href="pendingprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+                <i class="fas fa-clock mr-2"></i>
+                Pending Projects
+            </a>
+            <a href="activeprojects.html" class="block px-4 py-2 text-gray-800 hover:bg-sky-50 hover:text-sky-500">
+                <i class="fas fa-check-circle mr-2"></i>
+                Active Projects
+            </a>
+        </div>
     </div>
 
     <!-- Main content -->
@@ -318,7 +335,7 @@
         <!-- Filters and Search -->
         <div class="flex flex-row justify-between gap-2 mb-6 items-center">
             <div class="relative flex-shrink-0">
-                <button id="filterButton" class="flex items-center space-x-1 px-3 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300">
+                <button id="filterButton" class="flex items-center space-x-1 px-4 h-[42px] bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300">
                     <i class="fas fa-filter text-gray-600"></i>
                     <span class="text-sm font-medium text-gray-700">Filters</span>
                     <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
@@ -374,15 +391,17 @@
                     </div>
                 </div>
             </div>
-            <!-- Search Bar -->
-            <div class="relative w-36 sm:w-48 md:w-56">
-                <input type="search" 
-                       placeholder="Search..." 
-                       class="w-full pl-10 pr-4 py-2 rounded-lg border border-green-500 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300"
-                />
-                <button class="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-600 transition-colors">
-                    <i class="fas fa-search"></i>
-                </button>
+            <div class="flex items-center gap-2 w-full sm:w-auto sm:ml-auto">
+                <!-- Search Bar -->
+                <div class="relative w-full sm:w-48">
+                    <input type="search" 
+                           placeholder="Search..." 
+                           class="w-full h-[42px] pl-10 pr-4 rounded-lg border border-green-500 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300"
+                    />
+                    <button class="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-600 transition-colors">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -394,56 +413,52 @@
                         <tr>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="priority">
                                 <div class="flex items-center space-x-2">
-                                    <span>Priority</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                    <span>Priority Type</span>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="category">
                                 <div class="flex items-center space-x-2">
                                     <span>Service Category</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="client">
+                                <div class="flex items-center space-x-2">
+                                    <span>Client Name</span>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="address">
                                 <div class="flex items-center space-x-2">
                                     <span>Address</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="start-date">
                                 <div class="flex items-center space-x-2">
                                     <span>Start Date</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="hours">
                                 <div class="flex items-center space-x-2">
                                     <span>B. Hours</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="distance">
                                 <div class="flex items-center space-x-2">
                                     <span>Distance</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="eta">
                                 <div class="flex items-center space-x-2">
                                     <span>ETA</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="team">
                                 <div class="flex items-center space-x-2">
-                                    <span>Team</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                    <span>Team Assigned</span>
                                 </div>
                             </th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="job-type">
+                            <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="status">
                                 <div class="flex items-center space-x-2">
-                                    <span>Job Type</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                    <span>Status</span>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold">Actions</th>
@@ -455,19 +470,13 @@
                                 <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-leaf text-green-500"></i>
-                                    <span class="text-sm font-medium text-gray-900">Lawn Mowing</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">Lawn Mowing</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
-                                </div>
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -476,16 +485,10 @@
                                 <span class="text-sm text-gray-500">8 hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-route text-green-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">37.6 km</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -495,7 +498,6 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
-                                    <i class="fas fa-eye mr-1"></i>
                                     View
                                 </button>
                             </td>
@@ -505,25 +507,19 @@
                                 <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-home text-orange-500"></i>
-                                    <span class="text-sm font-medium text-gray-900">Roofing Installation</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">Lawn Mowing</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A N/A</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Lost Street Dimatagpuan Dimahanap,, 1234">Lost Street Dimatagpuan Dimahanap,, 1234</p>
-                                </div>
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Lost Street Dimatagpuan Dimahanap,, 1234">Lost Street Dimatagpuan Dimahanap,, 1234</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm text-gray-500">200 hrs.</span>
+                                <span class="text-sm text-gray-500">8 hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">Offline</span>
@@ -539,7 +535,6 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
-                                    <i class="fas fa-eye mr-1"></i>
                                     View
                                 </button>
                             </td>
@@ -549,19 +544,13 @@
                                 <span class="status-badge text-white text-xs font-semibold px-3 py-1 rounded-full">VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-broom text-blue-500"></i>
-                                    <span class="text-sm font-medium text-gray-900">Office Cleaning Service</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">Office Cleaning Service</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm font-medium text-gray-900">Ryan Lester</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines San Jose Monte Bulacan, 3023">Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines San Jose Monte Bulacan, 3023</p>
-                                </div>
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines San Jose Monte Bulacan, 3023">Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines San Jose Monte Bulacan, 3023</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -570,29 +559,19 @@
                                 <span class="text-sm text-gray-500">60 hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-route text-green-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">37.6 km</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-users text-purple-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">Team B</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">Team B</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Pending</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
-                                    <i class="fas fa-eye mr-1"></i>
                                     View
                                 </button>
                             </td>
@@ -602,19 +581,13 @@
                                 <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-paint-roller text-blue-500"></i>
-                                    <span class="text-sm font-medium text-gray-900">Residential House Painting</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">Residential House Painting</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
-                                </div>
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -623,16 +596,10 @@
                                 <span class="text-sm text-gray-500">120 hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-route text-green-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">37.6 km</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -642,7 +609,6 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
-                                    <i class="fas fa-eye mr-1"></i>
                                     View
                                 </button>
                             </td>
@@ -652,19 +618,13 @@
                                 <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-leaf text-green-500"></i>
-                                    <span class="text-sm font-medium text-gray-900">Lawn Maintenance Service</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">Lawn Maintenance Service</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A N/A</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Lost Street Dimatagpuan Dimahanap,, 1234">Lost Street Dimatagpuan Dimahanap,, 1234</p>
-                                </div>
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Lost Street Dimatagpuan Dimahanap,, 1234">Lost Street Dimatagpuan Dimahanap,, 1234</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -673,10 +633,10 @@
                                 <span class="text-sm text-gray-500">200 hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm text-gray-500">Offline</span>
+                                <span class="text-sm font-medium text-gray-900">Offline</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm text-gray-500">Offline</span>
+                                <span class="text-sm font-medium text-gray-900">Offline</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -686,7 +646,6 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
-                                    <i class="fas fa-eye mr-1"></i>
                                     View
                                 </button>
                             </td>
@@ -696,19 +655,13 @@
                                 <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-bolt text-yellow-500"></i>
-                                    <span class="text-sm font-medium text-gray-900">Electrical Wiring Installation</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">Electrical Wiring Installation</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
-                                </div>
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -717,16 +670,10 @@
                                 <span class="text-sm text-gray-500">15 hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-route text-green-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">37.6 km</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -736,7 +683,6 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
-                                    <i class="fas fa-eye mr-1"></i>
                                     View
                                 </button>
                             </td>
@@ -746,19 +692,13 @@
                                 <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-seedling text-green-500"></i>
-                                    <span class="text-sm font-medium text-gray-900">Weed Control</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">Weed Control</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
-                                </div>
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -767,16 +707,10 @@
                                 <span class="text-sm text-gray-500">15 hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-route text-green-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">37.6 km</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -786,7 +720,6 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
-                                    <i class="fas fa-eye mr-1"></i>
                                     View
                                 </button>
                             </td>
@@ -796,19 +729,13 @@
                                 <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Non-VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-wrench text-orange-500"></i>
-                                    <span class="text-sm font-medium text-gray-900">Plumbing Repair</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">Plumbing Repair</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-map-marker-alt text-red-500 text-xs"></i>
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
-                                </div>
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -817,16 +744,10 @@
                                 <span class="text-sm text-gray-500">15 hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-route text-green-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">37.6 km</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-clock text-sky-500 text-xs"></i>
-                                    <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
-                                </div>
+                                <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -836,7 +757,6 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
-                                    <i class="fas fa-eye mr-1"></i>
                                     View
                                 </button>
                             </td>
@@ -867,9 +787,20 @@
         </div>
     </main>
 
+    <!-- Modal for viewing dispatch details -->
+    <div id="dispatchModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+            <button id="closeModal" class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-xl font-bold">&times;</button>
+            <h2 class="text-xl font-semibold mb-4">Dispatch Details</h2>
+            <div id="modalContent" class="space-y-2 text-gray-700 text-sm max-h-96 overflow-y-auto">
+                <!-- Details will be populated here -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // Mobile nav toggle script from header.html
-        const mobileMenuBtn = document.getElementById('mobile-menu');
+        const mobileMenuBtn = document.getElementById('burgerMenuBtn');
         const mobileNavModal = document.getElementById('mobile-nav-modal');
         const closeMobileNavBtn = document.getElementById('close-mobile-nav');
 
@@ -885,28 +816,32 @@
             });
         }
 
-        // Project Dropdown functionality
+        // Toggle mobile menu
+        document.getElementById('burgerMenuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Toggle dropdown menu
         const projectButton = document.getElementById('projectButton');
         const dropdownMenu = document.getElementById('dropdownMenu');
 
-        if (projectButton && dropdownMenu) {
-            projectButton.addEventListener('click', () => {
-                dropdownMenu.classList.toggle('hidden');
-                
-                // Position the dropdown under the button
-                const buttonRect = projectButton.getBoundingClientRect();
-                dropdownMenu.style.top = `${buttonRect.bottom + window.scrollY}px`;
-                dropdownMenu.style.left = `${buttonRect.left}px`;
-                dropdownMenu.style.width = `${buttonRect.width}px`;
-            });
+        projectButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('hidden');
+            
+            // Position the dropdown menu
+            const buttonRect = projectButton.getBoundingClientRect();
+            dropdownMenu.style.top = `${buttonRect.bottom + window.scrollY}px`;
+            dropdownMenu.style.left = `${buttonRect.left}px`;
+        });
 
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (event) => {
-                if (!projectButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                    dropdownMenu.classList.add('hidden');
-                }
-            });
-        }
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!projectButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
 
         // Load header and navigation
         document.addEventListener('DOMContentLoaded', function() {
@@ -1012,6 +947,56 @@
                 filterDropdown.classList.add('hidden');
                 filterButton.classList.remove('bg-gray-50');
             }
+        });
+
+        // Add event listeners for view buttons
+        document.querySelectorAll('button.animated-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                if (!row) return;
+
+                // Extract details from the row cells
+                const details = {
+                    'Priority Type': row.querySelector('td:nth-child(1) .status-badge')?.textContent.trim() || '',
+                    'Service Category': row.querySelector('td:nth-child(2) span.text-sm.font-medium')?.textContent.trim() || '',
+                    'Client Name': row.querySelector('td:nth-child(3) span')?.textContent.trim() || '',
+                    Address: row.querySelector('td:nth-child(4) p')?.getAttribute('title') || row.querySelector('td:nth-child(4) p')?.textContent.trim() || '',
+                    'Start Date': row.querySelector('td:nth-child(5) span')?.textContent.trim() || '',
+                    'B. Hours': row.querySelector('td:nth-child(6) span')?.textContent.trim() || '',
+                    Distance: row.querySelector('td:nth-child(7) span.text-sm.font-medium')?.textContent.trim() || '',
+                    ETA: row.querySelector('td:nth-child(8) span.text-sm.font-medium')?.textContent.trim() || '',
+                    'Team Assigned': row.querySelector('td:nth-child(9) span.text-sm.font-medium')?.textContent.trim() || '',
+                    Status: row.querySelector('td:nth-child(10) span')?.textContent.trim() || ''
+                };
+
+                // Populate modal content
+                const modalContent = document.getElementById('modalContent');
+                modalContent.innerHTML = Object.entries(details)
+                    .map(([key, value]) => `
+                        <div class="flex justify-between py-2 border-b border-gray-100">
+                            <span class="font-medium text-gray-600">${key}:</span>
+                            <span class="text-gray-800">${value}</span>
+                        </div>
+                    `)
+                    .join('');
+
+                // Show modal
+                const modal = document.getElementById('dispatchModal');
+                modal.classList.remove('hidden');
+
+                // Close modal functionality
+                const closeModal = document.getElementById('closeModal');
+                closeModal.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                });
+
+                // Close modal when clicking outside
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            });
         });
     </script>
 </body>

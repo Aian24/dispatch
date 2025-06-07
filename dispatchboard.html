@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <title>Dispatches Dashboard</title>
+    <title>Dispatch Board</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -15,11 +15,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        }
-
-        /* Prevent text wrapping in table cells */
-        table td, table th {
-            white-space: nowrap;
         }
 
         /* Mobile Select Styling */
@@ -90,21 +85,6 @@
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-        }
-
-        /* Draggable Column Styles */
-        .draggable-header {
-            cursor: move;
-            user-select: none;
-        }
-
-        .draggable-header.dragging {
-            opacity: 0.5;
-            background: #e2e8f0;
-        }
-
-        .column-drop-target {
-            border-left: 2px solid #3b82f6;
         }
 
         /* Card Animations */
@@ -202,6 +182,26 @@
                 transform: translateX(0);
                 opacity: 1;
             }
+        }
+
+        /* Add these styles at the beginning of your existing styles */
+        .draggable-header {
+            cursor: move;
+            user-select: none;
+        }
+
+        .draggable-header.dragging {
+            opacity: 0.5;
+            background: #e2e8f0;
+        }
+
+        .column-drop-target {
+            border-left: 2px solid #3b82f6;
+        }
+
+        /* Prevent text wrapping in table cells */
+        table td, table th {
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -372,17 +372,51 @@
     <!-- Main content -->
     <main class="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-8">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
-            <h1 class="text-xl md:text-2xl font-bold text-gray-800">Active Dispatches</h1>
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800">Dispatch Board</h1>
             <div class="flex items-center space-x-4">
                 <button class="animated-button text-white px-3 py-2 md:px-4 md:py-2 rounded-lg flex items-center space-x-2 text-sm md:text-base">
                     <i class="fas fa-plus"></i>
                     <span class="hidden sm:inline">New Dispatch</span>
                     <span class="sm:hidden">New</span>
                 </button>
+                <!-- Show Map Button -->
+                <button id="showMapBtn" class="animated-button text-white px-3 py-2 md:px-4 md:py-2 rounded-lg flex items-center space-x-2 text-sm md:text-base">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span class="hidden sm:inline">Show Map</span>
+                    <span class="sm:hidden">Map</span>
+                </button>
+                <!-- Action Button with Dropdown -->
+                <div class="relative" id="actionDropdown">
+                    <button class="animated-button text-white px-3 py-2 md:px-4 md:py-2 rounded-lg flex items-center space-x-2 text-sm md:text-base">
+                        <i class="fas fa-ellipsis-v"></i>
+                        <span class="hidden sm:inline">Actions</span>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 hidden" id="actionMenu">
+                        <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">Routing</div>
+                        <button class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                            <i class="fas fa-random text-blue-500"></i>
+                            <span>Manual</span>
+                        </button>
+                        <button class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                            <i class="fas fa-route text-green-500"></i>
+                            <span>Near to Far</span>
+                        </button>
+                        <button class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                            <i class="fas fa-route text-orange-500"></i>
+                            <span>Far to Near</span>
+                        </button>
+                        <div class="border-t border-gray-100 my-1"></div>
+                        <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">Communication</div>
+                        <button class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                            <i class="fas fa-envelope text-purple-500"></i>
+                            <span>Email Client</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Filters and Search -->
+        <!-- Filters -->
         <div class="flex flex-row justify-between gap-2 mb-6 items-center">
             <div class="relative flex-shrink-0">
                 <button id="filterButton" class="flex items-center space-x-1 px-4 h-[42px] bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300">
@@ -402,6 +436,19 @@
                                 <option>50 entries</option>
                                 <option>100 entries</option>
                             </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                            <div class="space-y-2">
+                                <input type="date" 
+                                       class="w-full text-sm px-3 py-2 rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300"
+                                       placeholder="From Date"
+                                />
+                                <input type="date" 
+                                       class="w-full text-sm px-3 py-2 rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300"
+                                       placeholder="To Date"
+                                />
+                            </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
@@ -434,6 +481,15 @@
                                 <option>Low</option>
                             </select>
                         </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <select class="w-full text-sm px-3 py-2 rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-300">
+                                <option>All Status</option>
+                                <option>Approved</option>
+                                <option>Pending</option>
+                                <option>Cancelled</option>
+                            </select>
+                        </div>
                         <div class="flex justify-end space-x-2 pt-2 border-t border-gray-100">
                             <button class="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800">Reset</button>
                             <button class="px-3 py-1.5 text-sm text-white bg-sky-500 rounded-lg hover:bg-sky-600">Apply</button>
@@ -464,55 +520,51 @@
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="priority">
                                 <div class="flex items-center space-x-2">
                                     <span>Priority</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="category">
                                 <div class="flex items-center space-x-2">
                                     <span>Service Category</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="client">
+                                <div class="flex items-center space-x-2">
+                                    <span>Client</span>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="address">
                                 <div class="flex items-center space-x-2">
                                     <span>Address</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="start-date">
                                 <div class="flex items-center space-x-2">
                                     <span>Start Date</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="hours">
                                 <div class="flex items-center space-x-2">
                                     <span>B. Hours</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="distance">
                                 <div class="flex items-center space-x-2">
                                     <span>Distance</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="eta">
                                 <div class="flex items-center space-x-2">
                                     <span>ETA</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="team">
                                 <div class="flex items-center space-x-2">
                                     <span>Team</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
                                 </div>
                             </th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="job-type">
+                            <th class="px-6 py-4 text-left text-sm font-semibold draggable-header" draggable="true" data-column="status">
                                 <div class="flex items-center space-x-2">
-                                    <span>Job Type</span>
-                                    <i class="fas fa-sort text-xs opacity-70"></i>
+                                    <span>Status</span>
                                 </div>
                             </th>
                             <th class="px-6 py-4 text-left text-sm font-semibold">Actions</th>
@@ -520,14 +572,17 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-6 py-4">
                                 <span class="status-badge text-white text-xs font-semibold px-3 py-1 rounded-full">VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">Lawn Mowing</span>
+                                <span class="text-sm font-medium text-gray-900">Plumbing Repair</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines">Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines</p>
+                                <span class="text-sm font-medium text-gray-900">Ryan Lester</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines San Jose Monte Bulacan, 3023">Pabahay 2000 Muzon San Jose Del Monte Bulacan, Philippines San Jose Monte Bulacan, 3023</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -536,16 +591,16 @@
                                 <span class="text-sm text-gray-500">N/A hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">37.6 km</span>
+                                <span class="text-sm font-medium text-gray-900">37.6 km</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">1h 19m</span>
+                                <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">Team B</span>
+                                <span class="text-sm font-medium text-gray-900">Team A</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full">One-Time</span>
+                                <span class="bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Approved</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
@@ -554,14 +609,17 @@
                             </td>
                         </tr>
                         <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-6 py-4">
                                 <span class="status-badge text-white text-xs font-semibold px-3 py-1 rounded-full">VIP</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">Electrical Wiring Installation</span>
+                                <span class="text-sm font-medium text-gray-900">Roofing Installation</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pinyahan, Diliman Philippines Quezon, Metro Manila">Pinyahan, Diliman Philippines Quezon, Metro Manila</p>
+                                <span class="text-sm font-medium text-gray-900">Jamie Dora</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023">Pabahay 2000 Muzon Philippines San Jose Del Monte, Bulacan, 3023</p>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-gray-500">N/A</span>
@@ -570,50 +628,16 @@
                                 <span class="text-sm text-gray-500">N/A hrs.</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">9.3 km</span>
+                                <span class="text-sm font-medium text-gray-900">37.6 km</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">31 mins</span>
+                                <span class="text-sm font-medium text-gray-900">1 hour 19 mins</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">Team A</span>
+                                <span class="text-sm font-medium text-gray-900">Team A</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full">One-Time</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
-                                    View
-                                </button>
-                            </td>
-                        </tr>
-                        <tr class="dispatch-card hover:bg-gradient-to-r hover:from-blue-50 hover:to-sky-50 transition-all duration-300">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="status-badge text-white text-xs font-semibold px-3 py-1 rounded-full">VIP</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">Residential House Painting</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                    <p class="text-sm text-gray-600 truncate max-w-[300px]" title="Pabahay 2000 Muzon Philippines San Jose Monte">Pabahay 2000 Muzon Philippines San Jose Monte</p>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm text-gray-500">N/A</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm text-gray-500">N/A hrs.</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">37.8 km</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">1h 18m</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">Team A</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-semibold px-3 py-1 rounded-full">One-Time</span>
+                                <span class="bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">Approved</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <button class="animated-button text-white px-4 py-2 rounded-lg text-sm">
@@ -628,7 +652,7 @@
             <!-- Pagination -->
             <div class="bg-gray-50 px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between items-center border-t border-gray-100 gap-4">
                 <div class="text-sm text-gray-600 order-2 md:order-1">
-                    Showing <span class="font-medium">1</span> to <span class="font-medium">3</span> of <span class="font-medium">3</span> entries
+                    Showing <span class="font-medium">1</span> to <span class="font-medium">2</span> of <span class="font-medium">2</span> entries
                 </div>
                 <div class="flex space-x-2 order-1 md:order-2">
                     <button class="px-3 py-2 md:px-4 md:py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200">
@@ -654,6 +678,30 @@
             <h2 class="text-xl font-semibold mb-4">Dispatch Details</h2>
             <div id="modalContent" class="space-y-2 text-gray-700 text-sm max-h-96 overflow-y-auto">
                 <!-- Details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Modal -->
+    <div id="mapModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-[9999]">
+        <div class="bg-white rounded-lg shadow-lg w-[90vw] h-[90vh] p-6 relative">
+            <button id="closeMapModal" class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-xl font-bold z-[10000]">&times;</button>
+            <h2 class="text-xl font-semibold mb-4">Dispatch Locations</h2>
+            <div id="map" class="w-full h-[calc(100%-4rem)] rounded-lg overflow-hidden relative">
+                <!-- Loading indicator -->
+                <div id="mapLoading" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-[10000]">
+                    <div class="text-center">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500 mx-auto"></div>
+                        <p class="mt-2 text-gray-600">Loading map...</p>
+                    </div>
+                </div>
+                <!-- Error message -->
+                <div id="mapError" class="absolute inset-0 bg-white flex items-center justify-center z-[10000] hidden">
+                    <div class="text-center p-4">
+                        <i class="fas fa-exclamation-circle text-red-500 text-4xl mb-2"></i>
+                        <p class="text-gray-600">Unable to load map. Please try again later.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -740,15 +788,144 @@
             }
         }
 
+        // Function to handle Action dropdown
+        function initializeActionDropdown() {
+            const actionButton = document.getElementById('actionDropdown');
+            const actionMenu = document.getElementById('actionMenu');
+
+            if (actionButton && actionMenu) {
+                actionButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isVisible = actionMenu.classList.contains('hidden');
+                    
+                    if (isVisible) {
+                        actionMenu.classList.remove('hidden');
+                    } else {
+                        actionMenu.classList.add('hidden');
+                    }
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!actionButton.contains(e.target)) {
+                        actionMenu.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        let map = null;
+        let markers = [];
+
+        // Function to initialize Google Maps
+        function initMap() {
+            try {
+                const mapElement = document.getElementById('map');
+                if (!mapElement) return;
+
+                // Show loading indicator
+                const loadingElement = document.getElementById('mapLoading');
+                const errorElement = document.getElementById('mapError');
+                if (loadingElement) loadingElement.style.display = 'flex';
+                if (errorElement) errorElement.classList.add('hidden');
+
+                // Initialize the map
+                map = new google.maps.Map(mapElement, {
+                    zoom: 12,
+                    center: { lat: 14.5995, lng: 120.9842 }, // Manila coordinates
+                    styles: [
+                        {
+                            "featureType": "all",
+                            "elementType": "geometry",
+                            "stylers": [{"color": "#f5f5f5"}]
+                        },
+                        {
+                            "featureType": "water",
+                            "elementType": "geometry",
+                            "stylers": [{"color": "#e9e9e9"}, {"lightness": 17}]
+                        }
+                    ]
+                });
+
+                // Add markers for each dispatch location
+                const dispatches = document.querySelectorAll('.dispatch-card');
+                dispatches.forEach(dispatch => {
+                    const address = dispatch.querySelector('td:nth-child(4) p')?.getAttribute('title');
+                    if (address) {
+                        // In a real application, you would geocode the address here
+                        // For now, we'll use a placeholder marker
+                        const marker = new google.maps.Marker({
+                            position: { lat: 14.5995, lng: 120.9842 },
+                            map: map,
+                            title: address
+                        });
+                        markers.push(marker);
+                    }
+                });
+
+                // Hide loading indicator
+                if (loadingElement) loadingElement.style.display = 'none';
+            } catch (error) {
+                console.error('Error initializing map:', error);
+                const loadingElement = document.getElementById('mapLoading');
+                const errorElement = document.getElementById('mapError');
+                if (loadingElement) loadingElement.style.display = 'none';
+                if (errorElement) errorElement.classList.remove('hidden');
+            }
+        }
+
+        // Function to handle map modal
+        function initializeMapModal() {
+            const showMapBtn = document.getElementById('showMapBtn');
+            const mapModal = document.getElementById('mapModal');
+            const closeMapModal = document.getElementById('closeMapModal');
+            const mapContent = mapModal.querySelector('.bg-white');
+
+            if (showMapBtn && mapModal && closeMapModal) {
+                showMapBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    mapModal.classList.remove('hidden');
+                    // Initialize map when modal is opened
+                    if (!map) {
+                        initMap();
+                    } else {
+                        // Trigger a resize event to ensure the map renders correctly
+                        google.maps.event.trigger(map, 'resize');
+                    }
+                });
+
+                closeMapModal.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    mapModal.classList.add('hidden');
+                });
+
+                // Prevent clicks inside the modal from closing it
+                if (mapContent) {
+                    mapContent.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                }
+
+                // Close modal when clicking outside
+                mapModal.addEventListener('click', (e) => {
+                    if (e.target === mapModal) {
+                        mapModal.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
         // Load header and navigation
         document.addEventListener('DOMContentLoaded', function() {
             loadHTML('nav/header.html', 'header-container').then(() => {
-                // Initialize mobile menu functionality after header is loaded
                 initializeMobileMenu();
             });
             loadHTML('nav/navigation.html', 'nav-container').then(() => {
-                // Initialize Project & Dispatch dropdown after navigation is loaded
                 initializeProjectDropdown();
+                initializeActionDropdown();
+                initializeMapModal();
             });
 
             // Add event listeners for view buttons
@@ -759,15 +936,16 @@
 
                     // Extract details from the row cells
                     const details = {
-                        Priority: row.querySelector('td:nth-child(1) .status-badge')?.textContent.trim() || '',
+                        'Priority Type': row.querySelector('td:nth-child(1) .status-badge')?.textContent.trim() || '',
                         'Service Category': row.querySelector('td:nth-child(2) span.text-sm.font-medium')?.textContent.trim() || '',
-                        Address: row.querySelector('td:nth-child(3) p')?.getAttribute('title') || row.querySelector('td:nth-child(3) p')?.textContent.trim() || '',
-                        'Start Date': row.querySelector('td:nth-child(4) span')?.textContent.trim() || '',
-                        'B. Hours': row.querySelector('td:nth-child(5) span')?.textContent.trim() || '',
-                        Distance: row.querySelector('td:nth-child(6) span.text-sm.font-medium')?.textContent.trim() || '',
-                        ETA: row.querySelector('td:nth-child(7) span.text-sm.font-medium')?.textContent.trim() || '',
-                        Team: row.querySelector('td:nth-child(8) span.text-sm.font-medium')?.textContent.trim() || '',
-                        'Job Type': row.querySelector('td:nth-child(9) span')?.textContent.trim() || ''
+                        'Client Name': row.querySelector('td:nth-child(3) span')?.textContent.trim() || '',
+                        Address: row.querySelector('td:nth-child(4) p')?.getAttribute('title') || row.querySelector('td:nth-child(4) p')?.textContent.trim() || '',
+                        'Start Date': row.querySelector('td:nth-child(5) span')?.textContent.trim() || '',
+                        'B. Hours': row.querySelector('td:nth-child(6) span')?.textContent.trim() || '',
+                        Distance: row.querySelector('td:nth-child(7) span.text-sm.font-medium')?.textContent.trim() || '',
+                        ETA: row.querySelector('td:nth-child(8) span.text-sm.font-medium')?.textContent.trim() || '',
+                        'Team Assigned': row.querySelector('td:nth-child(9) span.text-sm.font-medium')?.textContent.trim() || '',
+                        Status: row.querySelector('td:nth-child(10) span')?.textContent.trim() || ''
                     };
 
                     // Build modal content HTML
@@ -796,30 +974,8 @@
                     document.getElementById('dispatchModal').classList.add('hidden');
                 }
             });
-        });
 
-        // Initialize tooltips
-        tippy('[data-tippy-content]', {
-            animation: 'scale',
-            theme: 'light',
-        });
-
-        // Toast notification auto-hide
-        setTimeout(() => {
-            const toast = document.querySelector('.toast');
-            if (toast) {
-                toast.style.animation = 'slideOut 0.5s ease-in forwards';
-                setTimeout(() => toast.remove(), 500);
-            }
-        }, 5000);
-
-        // Add entrance animation delay to cards
-        document.querySelectorAll('.dispatch-card').forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.1}s`;
-        });
-
-        // Add this new code for column reordering
-        document.addEventListener('DOMContentLoaded', function() {
+            // Add this code at the beginning of your script section
             const table = document.querySelector('table');
             const headers = table.querySelectorAll('th.draggable-header');
             let draggedHeader = null;
@@ -887,10 +1043,8 @@
                     headers.forEach(h => h.classList.remove('column-drop-target'));
                 });
             });
-        });
 
-        // Add this new code for filter dropdown
-        document.addEventListener('DOMContentLoaded', function() {
+            // Add this new code for filter dropdown
             const filterButton = document.getElementById('filterButton');
             const filterDropdown = document.getElementById('filterDropdown');
 
@@ -908,5 +1062,28 @@
                 });
             }
         });
+
+        // Initialize tooltips
+        tippy('[data-tippy-content]', {
+            animation: 'scale',
+            theme: 'light',
+        });
+
+        // Toast notification auto-hide
+        setTimeout(() => {
+            const toast = document.querySelector('.toast');
+            if (toast) {
+                toast.style.animation = 'slideOut 0.5s ease-in forwards';
+                setTimeout(() => toast.remove(), 500);
+            }
+        }, 5000);
+
+        // Add entrance animation delay to cards
+        document.querySelectorAll('.dispatch-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
     </script>
+    <!-- Add Google Maps API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
 </body>
+</html> 
