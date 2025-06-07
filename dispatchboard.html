@@ -732,88 +732,6 @@
             }
         }
 
-        // Function to initialize mobile menu
-        function initializeMobileMenu() {
-            const mobileMenuBtn = document.getElementById('mobile-menu');
-            const mobileNavModal = document.getElementById('mobile-nav-modal');
-            const closeMobileNavBtn = document.getElementById('close-mobile-nav');
-            
-            if (mobileMenuBtn && mobileNavModal && closeMobileNavBtn) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileNavModal.classList.remove('hidden');
-                    mobileNavModal.style.display = 'block';
-                });
-
-                closeMobileNavBtn.addEventListener('click', () => {
-                    mobileNavModal.classList.add('hidden');
-                    mobileNavModal.style.display = 'none';
-                });
-            }
-        }
-
-        // Function to handle Project & Dispatch dropdown
-        function initializeProjectDropdown() {
-            const projectButton = document.getElementById('projectButton');
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            const projectDropdown = document.getElementById('projectDropdown');
-
-            if (projectButton && dropdownMenu && projectDropdown) {
-                projectButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const isVisible = dropdownMenu.classList.contains('hidden');
-                    
-                    // Hide all other dropdowns first
-                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                        menu.classList.add('hidden');
-                    });
-
-                    if (isVisible) {
-                        // Position the dropdown
-                        const buttonRect = projectButton.getBoundingClientRect();
-                        dropdownMenu.style.top = `${buttonRect.bottom + window.scrollY}px`;
-                        dropdownMenu.style.left = `${buttonRect.left + window.scrollX}px`;
-                        
-                        dropdownMenu.classList.remove('hidden');
-                    } else {
-                        dropdownMenu.classList.add('hidden');
-                    }
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!projectDropdown.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                        dropdownMenu.classList.add('hidden');
-                    }
-                });
-            }
-        }
-
-        // Function to handle Action dropdown
-        function initializeActionDropdown() {
-            const actionButton = document.getElementById('actionDropdown');
-            const actionMenu = document.getElementById('actionMenu');
-
-            if (actionButton && actionMenu) {
-                actionButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const isVisible = actionMenu.classList.contains('hidden');
-                    
-                    if (isVisible) {
-                        actionMenu.classList.remove('hidden');
-                    } else {
-                        actionMenu.classList.add('hidden');
-                    }
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!actionButton.contains(e.target)) {
-                        actionMenu.classList.add('hidden');
-                    }
-                });
-            }
-        }
-
         let map = null;
         let markers = [];
 
@@ -879,12 +797,9 @@
             const showMapBtn = document.getElementById('showMapBtn');
             const mapModal = document.getElementById('mapModal');
             const closeMapModal = document.getElementById('closeMapModal');
-            const mapContent = mapModal.querySelector('.bg-white');
 
             if (showMapBtn && mapModal && closeMapModal) {
-                showMapBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                showMapBtn.addEventListener('click', () => {
                     mapModal.classList.remove('hidden');
                     // Initialize map when modal is opened
                     if (!map) {
@@ -895,18 +810,9 @@
                     }
                 });
 
-                closeMapModal.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                closeMapModal.addEventListener('click', () => {
                     mapModal.classList.add('hidden');
                 });
-
-                // Prevent clicks inside the modal from closing it
-                if (mapContent) {
-                    mapContent.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                    });
-                }
 
                 // Close modal when clicking outside
                 mapModal.addEventListener('click', (e) => {
@@ -917,16 +823,30 @@
             }
         }
 
-        // Load header and navigation
+        // Function to handle Action dropdown
+        function initializeActionDropdown() {
+            const actionButton = document.querySelector('#actionDropdown button');
+            const actionMenu = document.getElementById('actionMenu');
+
+            if (actionButton && actionMenu) {
+                actionButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    actionMenu.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!actionButton.contains(e.target) && !actionMenu.contains(e.target)) {
+                        actionMenu.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Initialize everything when the DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            loadHTML('nav/header.html', 'header-container').then(() => {
-                initializeMobileMenu();
-            });
-            loadHTML('nav/navigation.html', 'nav-container').then(() => {
-                initializeProjectDropdown();
-                initializeActionDropdown();
-                initializeMapModal();
-            });
+            initializeMapModal();
+            initializeActionDropdown();
 
             // Add event listeners for view buttons
             document.querySelectorAll('button.animated-button').forEach(button => {
@@ -974,93 +894,6 @@
                     document.getElementById('dispatchModal').classList.add('hidden');
                 }
             });
-
-            // Add this code at the beginning of your script section
-            const table = document.querySelector('table');
-            const headers = table.querySelectorAll('th.draggable-header');
-            let draggedHeader = null;
-
-            headers.forEach(header => {
-                header.addEventListener('dragstart', (e) => {
-                    draggedHeader = header;
-                    header.classList.add('dragging');
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('text/plain', header.dataset.column);
-                });
-
-                header.addEventListener('dragend', () => {
-                    header.classList.remove('dragging');
-                    headers.forEach(h => h.classList.remove('column-drop-target'));
-                });
-
-                header.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = 'move';
-                    headers.forEach(h => h.classList.remove('column-drop-target'));
-                    if (header !== draggedHeader) {
-                        header.classList.add('column-drop-target');
-                    }
-                });
-
-                header.addEventListener('dragleave', () => {
-                    header.classList.remove('column-drop-target');
-                });
-
-                header.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    const sourceColumn = e.dataTransfer.getData('text/plain');
-                    const targetColumn = header.dataset.column;
-                    
-                    if (sourceColumn && targetColumn && sourceColumn !== targetColumn) {
-                        const sourceIndex = Array.from(headers).findIndex(h => h.dataset.column === sourceColumn);
-                        const targetIndex = Array.from(headers).findIndex(h => h.dataset.column === targetColumn);
-                        
-                        // Reorder headers
-                        const headerRow = table.querySelector('thead tr');
-                        const sourceHeader = headerRow.children[sourceIndex];
-                        const targetHeader = headerRow.children[targetIndex];
-                        
-                        if (sourceIndex < targetIndex) {
-                            targetHeader.parentNode.insertBefore(sourceHeader, targetHeader.nextSibling);
-                        } else {
-                            targetHeader.parentNode.insertBefore(sourceHeader, targetHeader);
-                        }
-                        
-                        // Reorder data cells in each row
-                        const rows = table.querySelectorAll('tbody tr');
-                        rows.forEach(row => {
-                            const sourceCell = row.children[sourceIndex];
-                            const targetCell = row.children[targetIndex];
-                            
-                            if (sourceIndex < targetIndex) {
-                                targetCell.parentNode.insertBefore(sourceCell, targetCell.nextSibling);
-                            } else {
-                                targetCell.parentNode.insertBefore(sourceCell, targetCell);
-                            }
-                        });
-                    }
-                    
-                    headers.forEach(h => h.classList.remove('column-drop-target'));
-                });
-            });
-
-            // Add this new code for filter dropdown
-            const filterButton = document.getElementById('filterButton');
-            const filterDropdown = document.getElementById('filterDropdown');
-
-            if (filterButton && filterDropdown) {
-                filterButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    filterDropdown.classList.toggle('hidden');
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!filterButton.contains(e.target) && !filterDropdown.contains(e.target)) {
-                        filterDropdown.classList.add('hidden');
-                    }
-                });
-            }
         });
 
         // Initialize tooltips
